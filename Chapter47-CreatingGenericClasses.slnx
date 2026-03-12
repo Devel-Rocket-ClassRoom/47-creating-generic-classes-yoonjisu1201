@@ -3,6 +3,6 @@
   <Project Path="CodingPractice-02\CodingPractice-02.csproj" />
   <Project Path="CodingPractice-03\CodingPractice-03.csproj" />
   <Project Path="GenericConverter\GenericConverter.csproj" />
-  <Project Path="GenericStack\GenericStack.csproj" />
   <Project Path="GenericPool\GenericPool.csproj" />
+  <Project Path="GenericStack\GenericStack.csproj" />
 </Solution>
