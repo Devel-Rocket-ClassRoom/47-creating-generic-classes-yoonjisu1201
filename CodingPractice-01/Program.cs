@@ -392,7 +392,7 @@ public class EntityManager<T> where T : Entity
         }
         return null;
     }
-}
+}*/
 
 
 //11. 복합 제약 조건
@@ -422,31 +422,9 @@ public class Pool<T> where T : class, new()
     {
         _pool.Enqueue(item);
     }
-}*/
-
-try
-{
-    Console.Write("숫자를 입력하세요: ");
-    string input = Console.ReadLine();
-    int number = int.Parse(input);
-
-    int[] arr = new int[5];
-    arr[number] = 100;
-
-    Console.WriteLine($"arr[{number}]에 100을 저장했습니다.");
 }
-/*catch (FormatException)
-{
-    Console.WriteLine("숫자 형식이 아닙니다!");
-}
-catch (IndexOutOfRangeException)
-{
-    Console.WriteLine("인덱스가 0~4 범위를 벗어났습니다!");
-}*/
-catch (Exception ex)
-{
-    Console.WriteLine($"알 수 없는 오류: {ex.Message}");
-}
+
+
 
 
 
