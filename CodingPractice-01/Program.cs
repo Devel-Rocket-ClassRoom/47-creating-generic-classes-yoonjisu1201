@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Channels;
 using static System.Net.Mime.MediaTypeNames;
@@ -259,7 +260,7 @@ public class ReferenceContainer<T> where T : class
         return Value == null;
     }
 }
-*/
+
 
 //8. new() 제약 조건
 Factory<Product> factory = new Factory<Product>();
@@ -292,4 +293,160 @@ public class Product
     public int Id { get; set; }
     public string Name { get; set; } = "새 상품";
 }
+
+
+//9. 인터페이스 제약 조건   - 순위 업데이트 기능
+LeaderBoard<int> scoreBoard = new LeaderBoard<int>(3);
+scoreBoard.Submit(750);
+scoreBoard.Submit(300);
+scoreBoard.Submit(900);
+scoreBoard.Submit(500);
+
+scoreBoard.PrintRanking("점수 랭킹");
+public class LeaderBoard<T> where T : IComparable<T>
+{
+    private List<T> _entries = new List<T>();
+    private int _maxSize;
+
+    public LeaderBoard(int maxSize)
+    {
+        _maxSize = maxSize; 
+    }
+
+    public void Submit(T entry)
+    {
+        _entries.Add(entry);
+
+        for (int i = 0; i < _entries.Count - 1; i++)  //내림차순 정렬
+        {
+            for (int j = i+1; j < _entries.Count; j++)
+            {
+                if (_entries[i].CompareTo(_entries[j]) < 0)
+                {
+                    T temp = _entries[i];
+                    _entries[i] = _entries[j];
+                    _entries[j] = temp;
+                }
+            }
+        }
+
+        if (_entries.Count > _maxSize)
+        {
+            _entries.RemoveAt(_entries.Count - 1);  //인덱스넘버라서 -1
+        }
+    }
+
+    public void PrintRanking(string title)
+    {
+        Console.WriteLine($"=== {title} ===");
+        for (int i = 0; i < _entries.Count; i++)
+        {
+            Console.WriteLine($"   {i+1}위: {_entries[i]}");
+        }
+    }
+}
+
+
+//10.
+EntityManager<Player> playerManager = new EntityManager<Player>();
+EntityManager<Monster> monsterManager = new EntityManager<Monster>();
+
+playerManager.Add(new Player { Id = 1, Name = "홍길동" });
+playerManager.Add(new Player { Id = 2, Name = "김철수" });
+monsterManager.Add(new Monster { Id = 1, Level = 5 });
+
+var found = playerManager.FindById(1);
+Console.WriteLine($"찾은 플레이어: {found.Name}");
+public class Entity
+{
+    public int Id { get; set; }
+}
+public class Player : Entity
+{
+    public string Name { get; set; }
+}
+
+class Monster : Entity
+{
+    public int Level { get; set; }
+}
+
+public class EntityManager<T> where T : Entity
+{
+    private List<T> _entities = new List<T>();
+
+    public void Add(T entity)
+    {
+        _entities.Add(entity);
+        Console.WriteLine($"엔티티 추가됨 (ID: {entity.Id})");
+    }
+
+    public T FindById(int id)
+    {
+        foreach (var entity in _entities)
+        {
+            if (entity.Id == id)
+            {
+                return entity;
+            }
+        }
+        return null;
+    }
+}
+
+
+//11. 복합 제약 조건
+Pool<Product> pool = new Pool<Product>();
+
+Product item1 = pool
+
+public class Product
+{
+    public string item { get; set; } = "새 상품";
+}
+
+public class Pool<T> where T : class, new()
+{
+    private Queue<T> _pool = new Queue<T>();
+
+    public T Get()
+    {
+        if (_pool.Count > 0)
+        {
+            return _pool.Dequeue();
+        }
+        return new T();
+    }
+
+    public void Return(T item)
+    {
+        _pool.Enqueue(item);
+    }
+}*/
+
+try
+{
+    Console.Write("숫자를 입력하세요: ");
+    string input = Console.ReadLine();
+    int number = int.Parse(input);
+
+    int[] arr = new int[5];
+    arr[number] = 100;
+
+    Console.WriteLine($"arr[{number}]에 100을 저장했습니다.");
+}
+/*catch (FormatException)
+{
+    Console.WriteLine("숫자 형식이 아닙니다!");
+}
+catch (IndexOutOfRangeException)
+{
+    Console.WriteLine("인덱스가 0~4 범위를 벗어났습니다!");
+}*/
+catch (Exception ex)
+{
+    Console.WriteLine($"알 수 없는 오류: {ex.Message}");
+}
+
+
 
